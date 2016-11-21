@@ -1,46 +1,28 @@
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.TextArea;
-import java.awt.Toolkit;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
-
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
-import javax.swing.border.Border;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.xml.soap.Text;
-
 import Composite.*;
-import Observer_Pattern.NewsPaper;
-import Observer_Pattern.Reporter;
-import Observer_Pattern.Subject;
 import Singleton.Window;
 import Visitor.*;
 
 
 public class DriverTest   {
 
+	private static Element messageCount = new MessageCount();
 	
 	
        public static void main(String[] args){
@@ -74,7 +56,7 @@ public class DriverTest   {
 	 	      DefaultTreeModel mode1 = new DefaultTreeModel(subTree1);
 		      JTree followersTree = new JTree(mode1);
 		      DefaultMutableTreeNode subTree2 = new DefaultMutableTreeNode("Users");
-		
+		      
 		      for(int i=0;i<newUsers.size();i++)
 		      {  
 			      DefaultMutableTreeNode x = new DefaultMutableTreeNode(users.get(i).getName());
@@ -127,6 +109,7 @@ public class DriverTest   {
 				     String twitt = m+tweet.getText();
 				     message.setText(m+"\n"+currentUser+": "+tweet.getText());
 				     tweet.setText(null);
+				     messageCount.count();
 			  }
 		      });
             
@@ -162,7 +145,7 @@ public class DriverTest   {
               //array list to store the users
               List <SingleUser> listUser = new ArrayList<SingleUser>();
               //Instanse of element to use visitor patern
-              Element messageCount = new MessageCount();
+              
 	          Element groupCount = new GroupCount();
 	          Element userCount = new  UserCount();
 	          CountVisitor visitor = new CountVisitor();
@@ -207,10 +190,10 @@ public class DriverTest   {
 	    });
 		
         
-        button2.addActionListener(new ActionListener() {
+               button2.addActionListener(new ActionListener() {
             
         	   @Override
-			    public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) {
                 String  groupName = JOptionPane.showInputDialog("Please enter the group name");
 				int  groupId = Integer.parseInt(JOptionPane.showInputDialog("Please enter the group ID"));
 				Group newGroup = new Group(groupName, groupId);
@@ -221,10 +204,10 @@ public class DriverTest   {
 		});
 		
 		
-        button3.addActionListener(new ActionListener() {
+                button3.addActionListener(new ActionListener() {
 			
 			    @Override
-	    		public void actionPerformed(ActionEvent e) {
+	     public void actionPerformed(ActionEvent e) {
 			    	
 				if(text1.getText().equals("User ID")){
 				   JOptionPane.showMessageDialog(null, "Please Select a User from the tree");
@@ -238,10 +221,10 @@ public class DriverTest   {
 		});
         
         
-		button4.addActionListener(new ActionListener() {
+		        button4.addActionListener(new ActionListener() {
 			
-			@Override
-			public void actionPerformed(ActionEvent e) 
+		 @Override
+		 public void actionPerformed(ActionEvent e) 
 			{
 				   userCount.accept(visitor);
 			}
