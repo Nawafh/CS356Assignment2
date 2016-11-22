@@ -32,6 +32,12 @@ public class DriverTest   {
 		      
 	   }
 
+       public static void getTextArea(JTextArea area)
+   	{
+   		JTextArea e = area;
+   		e.setText("hello");
+   	}
+       
 	   //Method to hand the window of the User
 	   public static void userGui(String currentUser,List<SingleUser> users){
 		      List<SingleUser> newUsers =new ArrayList<SingleUser>();
