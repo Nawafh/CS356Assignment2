@@ -1,9 +1,8 @@
 import java.awt.BorderLayout;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,30 +15,31 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import Composite.*;
+import OpserverFollower.Follower;
+import OpserverFollower.PublisherUser;
 import Singleton.Window;
 import Visitor.*;
 
-
+/*
+ * Author Nawaf Alsufiani
+ * This is the main function for the twitter program 
+ */
 public class DriverTest   {
-
+    
 	private static Element messageCount = new MessageCount();
+	private static Hashtable<String,JTextArea > table = new Hashtable<>();
 	
-	
-       public static void main(String[] args){
+    public static void main(String[] args){
 		      demo();
-		      
-		      
-		      
+		 
 	   }
 
-       public static void getTextArea(JTextArea area)
-   	{
-   		JTextArea e = area;
-   		e.setText("hello");
-   	}
-       
+    
 	   //Method to hand the window of the User
 	   public static void userGui(String currentUser,List<SingleUser> users){
+		     
+		      PublisherUser publisherUser = new PublisherUser();
+		      List<String> folowerOfTheUser = new ArrayList<>();
 		      List<SingleUser> newUsers =new ArrayList<SingleUser>();
 	          List<String> followers =new ArrayList<String>();
 	          newUsers.addAll(users);
@@ -57,7 +57,7 @@ public class DriverTest   {
 		      JTextArea userId = new JTextArea("User ID");
 		      JTextArea tweet = new JTextArea(1,15);
 		      JTextArea message = new JTextArea(15,15);
-		      //folowers tree
+		      table.put(currentUser, message);
 		      DefaultMutableTreeNode subTree1 = new DefaultMutableTreeNode("Followers");
 	 	      DefaultTreeModel mode1 = new DefaultTreeModel(subTree1);
 		      JTree followersTree = new JTree(mode1);
@@ -67,6 +67,7 @@ public class DriverTest   {
 		      {  
 			      DefaultMutableTreeNode x = new DefaultMutableTreeNode(users.get(i).getName());
 			      subTree2.insert(x, 0);
+			    
 		      }
 		      DefaultTreeModel mode2 = new DefaultTreeModel(subTree2);
 		      JTree usersTree = new JTree(mode2);
@@ -112,10 +113,17 @@ public class DriverTest   {
 			  @Override
 			  public void actionPerformed(ActionEvent e) {
 				     String m = message.getText();
-				     String twitt = m+tweet.getText();
 				     message.setText(m+"\n"+currentUser+": "+tweet.getText());
-				     tweet.setText(null);
+				     String h = "\n"+currentUser+": "+tweet.getText();
 				     messageCount.count();
+				     
+				    for(int i=0;i<folowerOfTheUser.size();i++)
+				     {
+				    	 
+				    	 Follower follower = new Follower(table.get(folowerOfTheUser.get(i)));
+				    	 publisherUser.addObserver(follower);
+				     }
+				     publisherUser.setMessage(h);
 			  }
 		      });
             
@@ -130,6 +138,8 @@ public class DriverTest   {
 						{   followers.add(userId.getText());
 						    DefaultMutableTreeNode defaultMutableTreeNode=new DefaultMutableTreeNode(userId.getText());
 						    mode1.insertNodeInto(defaultMutableTreeNode, subTree1, 0);
+						    folowerOfTheUser.add(userId.getText());
+						    System.out.println("the user "+folowerOfTheUser.toString());
 						}
 						else
 						{
